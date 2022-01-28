@@ -73,11 +73,11 @@ def playlist(client, Client, message: Message):
         message.reply_text(_("playlist_1"))
         return
 
-    _all = ""
+    _all = "".join(
+        str(i + 1) + ". " + all_[i]["title"] + ": " + all_[i]["url"] + "\n"
+        for i in range(len(all_))
+    )
 
-    for i in range(len(all_)):
-        _all += str(i + 1) + ". " + \
-            all_[i]["title"] + ": " + all_[i]["url"] + "\n"
 
     if len(_all) < 4096:
         message.reply_text(_all, parse_mode=None,

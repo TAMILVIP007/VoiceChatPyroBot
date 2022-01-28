@@ -19,27 +19,24 @@ def worker():
         currently_playing = item
         log = None  # Group "Now Playing" message to be deleted if sent
 
-        if "on_start" in item:  # Avoid KeyError
-            if item["on_start"]:  # Make sure it is not None
-                # True quote to make sure the users understands which song
-                run(item["on_start"], quote=True)
+        if "on_start" in item and item["on_start"]:
+            # True quote to make sure the users understands which song
+            run(item["on_start"], quote=True)
 
-        if "log" in item:
-            if item["log"]:
-                caption = item["log"]["kwargs"]["caption"]
-                caption = caption.format(
-                    item["url"],
-                    item["title"],
-                    item["duration"],
-                )  # Edit the caption and add the video title (with a link to it) and it's duration
-                log = run(item["log"], caption=caption)
+        if "log" in item and item["log"]:
+            caption = item["log"]["kwargs"]["caption"]
+            caption = caption.format(
+                item["url"],
+                item["title"],
+                item["duration"],
+            )  # Edit the caption and add the video title (with a link to it) and it's duration
+            log = run(item["log"], caption=caption)
 
         mpv.play(item["file"])
         mpv.wait_for_playback()
 
-        if "on_end" in item:
-            if item["on_end"]:
-                run(item["on_end"], quote=True)
+        if "on_end" in item and item["on_end"]:
+            run(item["on_end"], quote=True)
 
         if log:  # As said below, if the "Now Playing" message was sent, delete it
             log.delete()

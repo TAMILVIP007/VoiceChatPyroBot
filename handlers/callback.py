@@ -14,9 +14,7 @@ def callback(client: Client, query: CallbackQuery):
     if query.data == "decrease_volume":
         volume = current_volume - 1
 
-        if volume < 0:
-            volume = 0
-
+        volume = max(volume, 0)
         volume = f"{volume}%"
 
         subprocess.Popen(["pactl", "set-sink-volume", "MySink", volume]).wait()
@@ -40,9 +38,7 @@ def callback(client: Client, query: CallbackQuery):
     elif query.data == "increase_volume":
         volume = current_volume + 1
 
-        if volume > 100:
-            volume = 100
-
+        volume = min(volume, 100)
         volume = f"{volume}%"
 
         subprocess.Popen(["pactl", "set-sink-volume", "MySink", volume]).wait()

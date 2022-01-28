@@ -31,25 +31,20 @@ def worker():
                 int(info["duration"] / 60) > DUR_LIMIT
                 and item["sender_id"] not in SUDO_USERS
             ):
-                if "on_duration_limit" in item:
-                    if item["on_duration_limit"]:
-                        item["on_duration_limit"]["args"][0] = item["on_duration_limit"]["args"][0].format(
-                            DUR_LIMIT)
-                        run(item["on_duration_limit"])
-                q.task_done()
+                if "on_duration_limit" in item and item["on_duration_limit"]:
+                    item["on_duration_limit"]["args"][0] = item["on_duration_limit"]["args"][0].format(
+                        DUR_LIMIT)
+                    run(item["on_duration_limit"])
             elif info["is_live"]:
-                if "on_is_live_error" in item:
-                    if item["on_is_live_error"]:
-                        run(item["on_is_live_error"])
-                q.task_done()
+                if "on_is_live_error" in item and item["on_is_live_error"]:
+                    run(item["on_is_live_error"])
             else:
                 file_name = info["id"] + "." + info["ext"]
                 _log = item["play_function"]["kwargs"]["log"]
 
                 if file_name not in os.listdir("downloads"):
-                    if "on_start" in item:
-                        if item["on_start"]:
-                            run(item["on_start"])
+                    if "on_start" in item and item["on_start"]:
+                        run(item["on_start"])
                     if _log:
                         open("downloads/" + info["id"] + ".png", "wb+").write(
                             requests.get(info["thumbnails"][-1]["url"]).content
@@ -72,15 +67,13 @@ def worker():
                     log=_log,
                 )
 
-                if "on_end" in item:
-                    if item["on_end"]:
-                        run(item["on_end"])
+                if "on_end" in item and item["on_end"]:
+                    run(item["on_end"])
 
-                q.task_done()
+            q.task_done()
         except:
-            if "on_error" in item:
-                if item["on_error"]:
-                    run(item["on_error"])
+            if "on_error" in item and item["on_error"]:
+                run(item["on_error"])
             q.task_done()
 
 
