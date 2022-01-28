@@ -16,8 +16,7 @@ class State():
 def is_youtube(url):
     exp1 = r"(http|https)\:\/\/((www|m)\.|)youtu\.be\/.+"
     exp2 = r"(http|https)\:\/\/((www|m)\.|)youtube\.com\/watch.+"
-    match = bool(re.match(exp1, url)) or bool(re.match(exp2, url))
-    return match
+    return bool(re.match(exp1, url)) or bool(re.match(exp2, url))
 
 
 def format_duration(seconds: int) -> str:
@@ -32,8 +31,7 @@ def format_duration(seconds: int) -> str:
         "m": 60,
         "s": 1
     }
-    for age in r_ange_s:
-        divisor = r_ange_s[age]
+    for age, divisor in r_ange_s.items():
         v_m, remainder = divmod(remainder, divisor)
         v_m = int(v_m)
         if v_m != 0:

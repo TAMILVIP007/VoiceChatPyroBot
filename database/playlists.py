@@ -5,32 +5,22 @@ c = db["playlists"]
 
 
 def create_playlist(name: str) -> bool:
-    playlist = c.find_one({"name": name})
-
-    if playlist:
+    if playlist := c.find_one({"name": name}):
         return False
-    else:
-        c.insert_one(
-            {"name": name, "items": []}
-        )
-        return True
+    c.insert_one(
+        {"name": name, "items": []}
+    )
+    return True
 
 
 def get_playlist(name: str):
     playlist = c.find_one({"name": name})
 
-    if not playlist:
-        return False
-    else:
-        return playlist
+    return False if not playlist else playlist
 
 
 def add_item_to_playlist(name: str, item: dict) -> bool:
-    playlist = get_playlist(name)
-
-    if not playlist:
-        return False
-    else:
+    if playlist := get_playlist(name):
         items = playlist["items"]
         urls = [i["url"] for i in items]
 
@@ -46,14 +36,12 @@ def add_item_to_playlist(name: str, item: dict) -> bool:
             }
         )
         return True
+    else:
+        return False
 
 
 def remove_item_from_playlist(name: str, item: dict) -> bool:
-    playlist = get_playlist(name)
-
-    if not playlist:
-        return False
-    else:
+    if playlist := get_playlist(name):
         items = playlist["items"]
         urls = [i["url"] for i in items]
 
@@ -69,14 +57,12 @@ def remove_item_from_playlist(name: str, item: dict) -> bool:
             }
         )
         return True
+    else:
+        return False
 
 
 def reset_playlist(name: str, items: list) -> bool:
-    playlist = get_playlist(name)
-
-    if not playlist:
-        return False
-    else:
+    if playlist := get_playlist(name):
         if playlist["items"] == items:
             return False
 
@@ -87,15 +73,15 @@ def reset_playlist(name: str, items: list) -> bool:
             }
         )
         return True
+    else:
+        return False
 
 
 def delete_playlist(name: str) -> bool:
-    playlist = get_playlist(name)
-
-    if not playlist:
-        return False
-    else:
+    if playlist := get_playlist(name):
         c.delete_one(
             {"name": name}
         )
         return True
+    else:
+        return False

@@ -28,9 +28,7 @@ def queue(client: Client, message: Message):
 
     queue_ = player.queue.queue
     human_queue = _("queue_1").format(qsize) + "\n"
-    count = 1
-
-    for item in queue_:
+    for count, item in enumerate(queue_, start=1):
         human_queue += (
             _("queue_2").format(
                 count,
@@ -42,8 +40,6 @@ def queue(client: Client, message: Message):
             )
             + "\n"
         )
-        count += 1
-
     m = message.reply_text("....")
 
     try:
